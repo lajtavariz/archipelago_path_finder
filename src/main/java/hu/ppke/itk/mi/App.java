@@ -1,13 +1,14 @@
 package hu.ppke.itk.mi;
 
-/**
- * Hello world!
- *
- */
-public class App 
+import java.awt.*;
+
+public class App
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+        GraphicsDemo graphicsDemo = new GraphicsDemo();
+        graphicsDemo.setSize(new Dimension(370, 700));
+        graphicsDemo.setTitle("GraphicsDemo");
+        graphicsDemo.setVisible(true);
     }
 }
