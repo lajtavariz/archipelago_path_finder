@@ -9,16 +9,16 @@ import java.awt.event.WindowEvent;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 
-public class GraphicsDemo extends Frame{
+public class MapGenerator extends Frame implements IMapGenerator{
 
-    private static final short FEATURE_SIZE = 5;
     private static final short SIZE_OF_CANVAS = 800;
-    private static final float THRESHOLD = 0.5f;
+
+    private byte featureSize = 5;
+    private float threshold = 0.5f;
 
     private OpenSimplexNoise noise;
 
-
-    public GraphicsDemo(){
+    public MapGenerator(){
         // Anonymous inner class to handle window close events
         addWindowListener(new WindowAdapter(){
             @Override
@@ -36,9 +36,9 @@ public class GraphicsDemo extends Frame{
 
         for (int y = 0; y < SIZE_OF_CANVAS; y++){
             for (int x = 0; x < SIZE_OF_CANVAS; x++) {
-                double noiseValue = noise.eval(x / FEATURE_SIZE, y / FEATURE_SIZE);
+                double noiseValue = noise.eval(x / featureSize, y / featureSize);
 
-                if (noiseValue > THRESHOLD){
+                if (noiseValue > threshold){
                     g.setColor(GREEN);
                 }
                 else {
@@ -47,5 +47,16 @@ public class GraphicsDemo extends Frame{
                 g.fillRect(x, y, 1, 1);
             }
         }
+    }
+
+
+    public void changeThreshold(float threshold) {
+        this.threshold = threshold;
+        this.repaint();
+    }
+
+    public void changeFeatureSize(byte featureSize) {
+        this.featureSize = featureSize;
+        this.repaint();
     }
 }

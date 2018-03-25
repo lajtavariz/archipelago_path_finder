@@ -1,11 +1,34 @@
 package hu.ppke.itk.mi;
 
+import asg.cliche.Command;
+import asg.cliche.ShellFactory;
+
+import java.io.IOException;
+
 public class App
 {
-    public static void main( String[] args )
+
+    MapGenerator mapGenerator;
+
+    public App() {
+        mapGenerator = new MapGenerator();
+        mapGenerator.setTitle("MapGenerator");
+        mapGenerator.setVisible(true);
+    }
+
+    @Command
+    public void changeThreshold(float threshold){
+        mapGenerator.changeThreshold(threshold);
+    }
+
+    @Command
+    public String hello(){
+        return "hello";
+    }
+
+    public static void main(String[] args ) throws IOException
     {
-        GraphicsDemo graphicsDemo = new GraphicsDemo();
-        graphicsDemo.setTitle("GraphicsDemo");
-        graphicsDemo.setVisible(true);
+        ShellFactory.createConsoleShell("app", "", new App())
+                .commandLoop();
     }
 }
