@@ -4,10 +4,14 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import static java.awt.Color.BLUE;
+import static java.awt.Color.GREEN;
+
 public class GraphicsDemo extends Frame{
 
-    private static final short NR_OF_SQUARES = 10;
+    private static final short NR_OF_SQUARES = 50;
     private static final short SIZE_OF_CANVAS = 500;
+    private static final short SIZE_OF_RECT = SIZE_OF_CANVAS / NR_OF_SQUARES;
 
 
     public GraphicsDemo(){
@@ -23,22 +27,17 @@ public class GraphicsDemo extends Frame{
 
     @Override
     public void paint(Graphics g) {
-        short sizeOfRect = SIZE_OF_CANVAS / NR_OF_SQUARES;
 
-        for (int i = 0; i < NR_OF_SQUARES; i++){
-            for (int j = 0; j < NR_OF_SQUARES; j++) {
-                if ( j%2 == 0){
-
+        for (int rowNr = 0; rowNr < NR_OF_SQUARES; rowNr++){
+            for (int columnNr = 0; columnNr < NR_OF_SQUARES; columnNr++) {
+                if (columnNr % 2 == 0){
+                    g.setColor(rowNr % 2 == 0 ? GREEN : BLUE);
                 }
-
-
-
+                else {
+                    g.setColor(rowNr % 2 == 0 ? BLUE : GREEN);
+                }
+                g.fillRect(columnNr * SIZE_OF_RECT, rowNr * SIZE_OF_RECT, 60, 50);
             }
-
-
         }
-
-        g.drawRect(20, 150, 60, 50);
-        g.fillRect(110, 150, 60, 50);
     }
 }
