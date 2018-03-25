@@ -22,8 +22,8 @@ public class App
     }
 
     @Command
-    public String hello(){
-        return "hello";
+    public void changeFeatureSize(String featureSize){
+        mapGenerator.changeFeatureSize(Byte.valueOf(featureSize));
     }
 
     public static void main(String[] args ) throws IOException
