@@ -10,8 +10,7 @@ import java.awt.event.WindowEvent;
 import java.util.HashMap;
 
 import static hu.ppke.itk.ai.config.Config.SIZE_OF_CANVAS;
-import static hu.ppke.itk.ai.model.Category.LAND;
-import static hu.ppke.itk.ai.model.Category.WATER;
+import static hu.ppke.itk.ai.model.Category.*;
 import static java.awt.Color.*;
 
 public class MapView extends Frame{
@@ -32,6 +31,7 @@ public class MapView extends Frame{
         categoryToColor = new HashMap<Category, Color>();
         categoryToColor.put(LAND, GREEN);
         categoryToColor.put(WATER, BLUE);
+        categoryToColor.put(AGENT, RED);
     }
 
     @Override
@@ -54,7 +54,9 @@ public class MapView extends Frame{
                     g.setColor(WHITE);
                 }
 
-                g.fillRect(currentNode.getxPos(), currentNode.getyPos(), 1,1 );
+                g.fillRect(currentNode.getxPos() * map.getPixelSize(),
+                        currentNode.getyPos() * map.getPixelSize(),
+                        map.getPixelSize(), map.getPixelSize());
             }
         }
     }

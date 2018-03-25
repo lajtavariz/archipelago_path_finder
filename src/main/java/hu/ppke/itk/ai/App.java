@@ -27,8 +27,8 @@ public class App
     }
 
     @Command
-    public void changeFeatureSize(String featureSize) {
-        mapController.changeFeatureSize(Byte.valueOf(featureSize));
+    public void changePixelSize(int pixelSize) {
+        mapController.changePixelSize(pixelSize);
         mapController.updateView();
     }
 
@@ -42,6 +42,12 @@ public class App
     @Command
     public void regenerateMap() {
         mapController.regenerateMap();
+        mapController.updateView();
+    }
+
+    @Command
+    public void makeRandomStep() {
+        mapController.makeRandomStepWithAgent();
         mapController.updateView();
     }
 

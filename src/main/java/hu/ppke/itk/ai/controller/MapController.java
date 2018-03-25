@@ -12,12 +12,16 @@ public class MapController {
         mapModel.reGenerateNodes();
     }
 
-    public void changeFeatureSize(byte featureSize) {
-        mapModel.changeFeatureSize(featureSize);
+    public void changePixelSize(int pixelSize) {
+        mapModel.changePixelSize(pixelSize);
     }
 
     public void changeThreshold(float threshold) {
         mapModel.changeThreshold(threshold);
+    }
+
+    public void makeRandomStepWithAgent() {
+        mapModel.makeRandomStepWithAgent();
     }
 
     public void updateView () {

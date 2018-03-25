@@ -8,12 +8,12 @@ public class Config {
     /**
      * Default size of the map canvas
      */
-    public static final short SIZE_OF_CANVAS = 800;
+    public static final int SIZE_OF_CANVAS = 600;
 
     /**
-     * Default size of one feature on the map
+     * Default size of one pixel on the map
      */
-    public static final int DEFAULT_FEATURE_SIZE = 5;
+    public static final int DEFAULT_PIXEL_SIZE = 5;
 
     /**
      * Default threshold. It determines the ratio of land and water.
