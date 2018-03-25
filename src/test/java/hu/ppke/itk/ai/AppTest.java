@@ -1,4 +1,4 @@
-package hu.ppke.itk.mi;
+package hu.ppke.itk.ai;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

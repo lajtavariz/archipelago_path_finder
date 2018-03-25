@@ -1,4 +1,4 @@
-package hu.ppke.itk.mi.noise;
+package hu.ppke.itk.ai.lib;
 /*
  * OpenSimplex Noise in Java.
  * by Kurt Spencer

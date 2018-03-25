@@ -15,7 +15,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>hu.ppke.itk.mi.App</mainClass>
+              <mainClass>hu.ppke.itk.ai.App</mainClass>
             </manifest>
           </archive>
         </configuration>
