@@ -6,43 +6,74 @@ import junit.framework.TestSuite;
 
 import java.util.List;
 
-public class MapTest extends TestCase{
+public class MapTest extends TestCase {
 
-    public MapTest(String testName){
+    public MapTest(String testName) {
         super(testName);
     }
 
-    public static Test suite()
-    {
+    public static Test suite() {
         return new TestSuite(MapTest.class);
     }
 
-    public void testMap() {
-        Map map = new Map();
-        map.changePixelSize(300);
+    public void test2x2MapGraph() {
+        evaluateNodeNeighborsForNxNMap(2);
+    }
+
+    public void test3x3MapGraph() {
+        evaluateNodeNeighborsForNxNMap(3);
+    }
+
+    public void test10x10MapGraph() {
+        evaluateNodeNeighborsForNxNMap(10);
+    }
+
+    public void test299x299MapGraph() {
+        evaluateNodeNeighborsForNxNMap(299);
+    }
+
+    public void test1000x1000MapGraph() {
+        evaluateNodeNeighborsForNxNMap(1000);
+    }
+
+    private void evaluateNodeNeighborsForNxNMap(int N) {
+        Map map = new Map(N, 1);
         List<Node> nodes = map.getNodes();
 
-        assertEquals(4, nodes.size());
+        assertEquals(N * N, nodes.size());
 
-        assertEquals(null, nodes.get(0).getNorthNeighb());
-        assertEquals(nodes.get(1), nodes.get(0).getEastNeighb());
-        assertEquals(nodes.get(2), nodes.get(0).getSouthNeighb());
-        assertEquals(null, nodes.get(0).getWestNeighb());
+        Node expectedNorthNeighb;
+        Node expectedEastNeighb;
+        Node expectedSouthNeighb;
+        Node expectedWestNeighb;
 
-        assertEquals(null, nodes.get(1).getNorthNeighb());
-        assertEquals(null, nodes.get(1).getEastNeighb());
-        assertEquals(nodes.get(3), nodes.get(1).getSouthNeighb());
-        assertEquals(nodes.get(0), nodes.get(1).getWestNeighb());
+        for (int i = 0; i < nodes.size(); i++) {
+            Node currentNode = nodes.get(i);
+            if (currentNode.getyPos() == 0) {
+                expectedNorthNeighb = null;
+            } else {
+                expectedNorthNeighb = nodes.get(i - N);
+            }
+            if (i % N == N - 1) {
+                expectedEastNeighb = null;
+            } else {
+                expectedEastNeighb = nodes.get(i + 1);
+            }
+            if (currentNode.getyPos() == N - 1) {
+                expectedSouthNeighb = null;
+            } else {
+                expectedSouthNeighb = nodes.get(i + N);
+            }
+            if (i % N == 0) {
+                expectedWestNeighb = null;
+            } else {
+                expectedWestNeighb = nodes.get(i - 1);
+            }
 
-        assertEquals(nodes.get(0), nodes.get(2).getNorthNeighb());
-        assertEquals(nodes.get(3), nodes.get(2).getEastNeighb());
-        assertEquals(null, nodes.get(2).getSouthNeighb());
-        assertEquals(null, nodes.get(2).getWestNeighb());
-
-        assertEquals(nodes.get(1), nodes.get(3).getNorthNeighb());
-        assertEquals(null, nodes.get(3).getEastNeighb());
-        assertEquals(null, nodes.get(3).getSouthNeighb());
-        assertEquals(nodes.get(2), nodes.get(3).getWestNeighb());
-
+            assertEquals(expectedNorthNeighb, currentNode.getNorthNeighb());
+            assertEquals(expectedEastNeighb, currentNode.getEastNeighb());
+            assertEquals(expectedSouthNeighb, currentNode.getSouthNeighb());
+            assertEquals(expectedWestNeighb, currentNode.getWestNeighb());
+        }
     }
 }
