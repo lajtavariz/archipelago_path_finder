@@ -22,15 +22,16 @@ public class Map {
     private List<Node> nodes;
 
     public Map() {
-        canvasSize = DEAFAULT_SIZE_OF_CANVAS;
+        canvasSize = DEFAULT_CANVAS_SIZE;
         pixelSize = DEFAULT_PIXEL_SIZE;
         threshold = DEFAULT_THRESHOLD;
         init();
     }
 
-    Map(int canvasSize, int pixelSize) {
+    public Map(int canvasSize, int pixelSize) {
         this.canvasSize = canvasSize;
         this.pixelSize = pixelSize;
+        threshold = DEFAULT_THRESHOLD;
         init();
     }
 
@@ -123,34 +124,31 @@ public class Map {
         Random rand = new Random(System.currentTimeMillis());
         int n = rand.nextInt(100000) % 4;
 
-        switch (n) {
-            case 0:
-                evaluateChangesForStep(agentNode.getNorthNeighb());
-            case 1:
-                evaluateChangesForStep(agentNode.getEastNeighb());
-            case 2:
-                evaluateChangesForStep(agentNode.getSouthNeighb());
-            case 3:
-                evaluateChangesForStep(agentNode.getWestNeighb());
-        }
+        makeStep(n);
     }
 
     public void makeStep(int direction) {
         switch (direction) {
             case 0:
                 evaluateChangesForStep(agentNode.getNorthNeighb());
+                break;
             case 1:
                 evaluateChangesForStep(agentNode.getEastNeighb());
+                break;
             case 2:
                 evaluateChangesForStep(agentNode.getSouthNeighb());
+                break;
             case 3:
                 evaluateChangesForStep(agentNode.getWestNeighb());
+                break;
         }
     }
 
     private void evaluateChangesForStep(Node neighb) {
-        agentNode.setCategory(WATER);
-        agentNode = neighb.setCategory(AGENT);
+        if (neighb != null && !LAND.equals(neighb.getCategory())) {
+            agentNode.setCategory(WATER);
+            agentNode = neighb.setCategory(AGENT);
+        }
     }
 
     public List<Node> getNodes() {

@@ -17,7 +17,10 @@ public class App
         mapView.setTitle("MapView");
         mapView.setVisible(true);
 
-        mapController = new MapController().setMapView(mapView);
+        Map mapModel = new Map();
+
+        mapController = new MapController().setMapView(mapView).setMapModel(mapModel);
+        mapController.updateView();
     }
 
     @Command
@@ -33,22 +36,19 @@ public class App
     }
 
     @Command
-    public void initMap() {
-        Map mapModel = new Map();
-        mapController.setMapModel(mapModel);
-        mapController.updateView();
-    }
-
-    @Command
     public void regenerateMap() {
         mapController.regenerateMap();
         mapController.updateView();
     }
 
     @Command
-    public void makeRandomStep() {
-        mapController.makeRandomStepWithAgent();
-        mapController.updateView();
+    public void startRandomWalk() {
+        mapController.startRandomWalkWithAgent();
+    }
+
+    @Command
+    public void stopRandomWalk() {
+        mapController.stopRandomWalkWithAgent();
     }
 
     @Command

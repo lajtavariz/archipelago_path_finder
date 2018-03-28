@@ -7,6 +7,11 @@ public class MapController {
 
     private Map mapModel;
     private MapView mapView;
+    private Thread thread;
+
+    public MapController() {
+        thread = new Thread();
+    }
 
     public void regenerateMap() {
         mapModel.reGenerateNodes();
@@ -20,8 +25,14 @@ public class MapController {
         mapModel.setThreshold(threshold);
     }
 
-    public void makeRandomStepWithAgent() {
-        mapModel.makeRandomStepWithAgent();
+    public void startRandomWalkWithAgent() {
+        thread = new Thread(new RandomWalk());
+        thread.start();
+    }
+
+    public void stopRandomWalkWithAgent() {
+        // TODO use another way to stop the random walk
+        thread.stop();
     }
 
     public void makeStepWithAgent(int direction) {
@@ -40,5 +51,20 @@ public class MapController {
     public MapController setMapView(MapView mapView) {
         this.mapView = mapView;
         return this;
+    }
+
+    private class RandomWalk implements Runnable {
+
+        public void run() {
+            try {
+                while (true) {
+                    Thread.sleep(40);
+                    mapModel.makeRandomStepWithAgent();
+                    updateView();
+                }
+            } catch (InterruptedException exc) {
+                System.out.println(exc);
+            }
+        }
     }
 }
