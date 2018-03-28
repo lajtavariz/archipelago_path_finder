@@ -9,7 +9,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
 
-import static hu.ppke.itk.ai.config.Config.SIZE_OF_CANVAS;
+import static hu.ppke.itk.ai.config.Config.DEAFAULT_SIZE_OF_CANVAS;
 import static hu.ppke.itk.ai.model.Category.*;
 import static java.awt.Color.*;
 
@@ -26,7 +26,7 @@ public class MapView extends Frame{
                 System.exit(0);
             }
         });
-        setSize(SIZE_OF_CANVAS, SIZE_OF_CANVAS);
+        setSize(DEAFAULT_SIZE_OF_CANVAS, DEAFAULT_SIZE_OF_CANVAS);
 
         categoryToColor = new HashMap<Category, Color>();
         categoryToColor.put(LAND, GREEN);
@@ -38,8 +38,8 @@ public class MapView extends Frame{
     public void paint(Graphics g) {
 
         if (map == null) {
-            for (int y = 0; y < SIZE_OF_CANVAS; y++){
-                for (int x = 0; x < SIZE_OF_CANVAS; x++) {
+            for (int y = 0; y < DEAFAULT_SIZE_OF_CANVAS; y++){
+                for (int x = 0; x < DEAFAULT_SIZE_OF_CANVAS; x++) {
                     g.setColor(WHITE);
                     g.fillRect(x, y, 1, 1);
                 }

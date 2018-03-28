@@ -8,7 +8,7 @@ public class Config {
     /**
      * Default size of the map canvas
      */
-    public static final int SIZE_OF_CANVAS = 600;
+    public static final int DEAFAULT_SIZE_OF_CANVAS = 600;
 
     /**
      * Default size of one pixel on the map

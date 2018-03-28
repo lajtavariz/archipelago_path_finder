@@ -13,15 +13,19 @@ public class MapController {
     }
 
     public void changePixelSize(int pixelSize) {
-        mapModel.changePixelSize(pixelSize);
+        mapModel.setPixelSize(pixelSize);
     }
 
     public void changeThreshold(float threshold) {
-        mapModel.changeThreshold(threshold);
+        mapModel.setThreshold(threshold);
     }
 
     public void makeRandomStepWithAgent() {
         mapModel.makeRandomStepWithAgent();
+    }
+
+    public void makeStepWithAgent(int direction) {
+        mapModel.makeStep(direction);
     }
 
     public void updateView () {

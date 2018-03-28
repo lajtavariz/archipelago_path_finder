@@ -11,6 +11,7 @@ import static hu.ppke.itk.ai.model.Category.*;
 
 public class Map {
 
+    private int canvasSize;
     private int pixelSize;
     private float threshold;
     private int nrOfPixelsInARow;
@@ -21,50 +22,60 @@ public class Map {
     private List<Node> nodes;
 
     public Map() {
+        canvasSize = DEAFAULT_SIZE_OF_CANVAS;
         pixelSize = DEFAULT_PIXEL_SIZE;
         threshold = DEFAULT_THRESHOLD;
+        init();
+    }
+
+    Map(int canvasSize, int pixelSize) {
+        this.canvasSize = canvasSize;
+        this.pixelSize = pixelSize;
+        init();
+    }
+
+    private void init() {
+        nrOfPixelsInARow = calculateNrOfPixelsInARow();
         noise = getNoiseWithNewSeed();
         nodes = generateNodes();
-        calculateNrOfPixelsInARow();
     }
 
-    private void calculateNrOfPixelsInARow (){
-        nrOfPixelsInARow = SIZE_OF_CANVAS / pixelSize;
+    private int calculateNrOfPixelsInARow() {
+        return canvasSize / pixelSize;
     }
 
-    private OpenSimplexNoise getNoiseWithNewSeed(){
+    private OpenSimplexNoise getNoiseWithNewSeed() {
         return new OpenSimplexNoise(System.currentTimeMillis());
     }
 
-    public void changePixelSize(int pixelSize){
+    public void setPixelSize(int pixelSize) {
         this.pixelSize = pixelSize;
-        calculateNrOfPixelsInARow();
-        reGenerateNodes();
+        nrOfPixelsInARow = calculateNrOfPixelsInARow();
+        nodes = reGenerateNodes();
     }
 
-    public void changeThreshold(float threshold){
+    public void setThreshold(float threshold) {
         this.threshold = threshold;
-        reGenerateNodes();
+        nodes = reGenerateNodes();
     }
 
-    public void reGenerateNodes() {
+    public List<Node> reGenerateNodes() {
         noise = getNoiseWithNewSeed();
-        nodes = generateNodes();
+        return generateNodes();
     }
 
     private List<Node> generateNodes() {
         agentNode = null;
         List<Node> nodeList = new ArrayList<Node>();
-        for (int y = 0; y < nrOfPixelsInARow; y++){
+        for (int y = 0; y < nrOfPixelsInARow; y++) {
             for (int x = 0; x < nrOfPixelsInARow; x++) {
                 double noiseValue = noise.eval(x, y);
 
-                if (noiseValue > threshold){
+                if (noiseValue > threshold) {
                     nodeList.add(new Node(x, y, LAND));
-                }
-                else {
+                } else {
                     // we place the agent in the first generated water cell
-                    if (agentNode == null){
+                    if (agentNode == null) {
                         agentNode = new Node(x, y, AGENT);
                         nodeList.add(agentNode);
                     } else {
@@ -79,32 +90,29 @@ public class Map {
 
     private List<Node> findNeighbors(List<Node> nodeList) {
         for (int i = 0; i < nodeList.size(); i++) {
-            Node node = nodeList.get(i);
+            Node currentNode = nodeList.get(i);
 
-            if (node.getxPos() == 0){
-                node.setWestNeighb(null);
-                node.setEastNeighb(nodeList.get(i + 1));
-            }
-            else if (node.getxPos() > 0 && node.getxPos() < nrOfPixelsInARow - 1){
-                node.setWestNeighb(nodeList.get(i - 1));
-                node.setEastNeighb(nodeList.get(i + 1));
-            }
-            else{
-                node.setWestNeighb(nodeList.get(i - 1));
-                node.setEastNeighb(null);
-            }
+            int N = nrOfPixelsInARow;
 
-            if (node.getyPos() == 0){
-                node.setNorthNeighb(null);
-                node.setSouthNeighb(nodeList.get(i + nrOfPixelsInARow));
+            if (i < N) {
+                currentNode.setNorthNeighb(null);
+            } else {
+                currentNode.setNorthNeighb(nodeList.get(i - N));
             }
-            else if (node.getyPos() > 0 && node.getyPos() < nrOfPixelsInARow - 1){
-                node.setNorthNeighb(nodeList.get(i - nrOfPixelsInARow));
-                node.setSouthNeighb(nodeList.get(i + nrOfPixelsInARow));
+            if (i % N == N - 1) {
+                currentNode.setEastNeighb(null);
+            } else {
+                currentNode.setEastNeighb(nodeList.get(i + 1));
             }
-            else{
-                node.setNorthNeighb(nodeList.get(i - nrOfPixelsInARow));
-                node.setSouthNeighb(null);
+            if (N * N - N <= i) {
+                currentNode.setSouthNeighb(null);
+            } else {
+                currentNode.setSouthNeighb(nodeList.get(i + N));
+            }
+            if (i % N == 0) {
+                currentNode.setWestNeighb(null);
+            } else {
+                currentNode.setWestNeighb(nodeList.get(i - 1));
             }
         }
 
@@ -115,7 +123,7 @@ public class Map {
         Random rand = new Random(System.currentTimeMillis());
         int n = rand.nextInt(100000) % 4;
 
-        switch (n){
+        switch (n) {
             case 0:
                 evaluateChangesForStep(agentNode.getNorthNeighb());
             case 1:
@@ -127,13 +135,22 @@ public class Map {
         }
     }
 
-    private void evaluateChangesForStep(Node neighb){
-        if (neighb == null || neighb.getCategory().equals(LAND)){
-            //makeRandomStepWithAgent();
-        } else{
-            agentNode.setCategory(WATER);
-            agentNode = neighb.setCategory(AGENT);
+    public void makeStep(int direction) {
+        switch (direction) {
+            case 0:
+                evaluateChangesForStep(agentNode.getNorthNeighb());
+            case 1:
+                evaluateChangesForStep(agentNode.getEastNeighb());
+            case 2:
+                evaluateChangesForStep(agentNode.getSouthNeighb());
+            case 3:
+                evaluateChangesForStep(agentNode.getWestNeighb());
         }
+    }
+
+    private void evaluateChangesForStep(Node neighb) {
+        agentNode.setCategory(WATER);
+        agentNode = neighb.setCategory(AGENT);
     }
 
     public List<Node> getNodes() {

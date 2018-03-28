@@ -51,6 +51,12 @@ public class App
         mapController.updateView();
     }
 
+    @Command
+    public void makeStep(int direction) {
+        mapController.makeStepWithAgent(direction);
+        mapController.updateView();
+    }
+
     public static void main(String[] args ) throws IOException
     {
         ShellFactory.createConsoleShell("app", "", new App())
