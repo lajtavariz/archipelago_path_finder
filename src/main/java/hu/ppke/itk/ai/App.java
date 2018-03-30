@@ -4,7 +4,7 @@ import asg.cliche.Command;
 import asg.cliche.ShellFactory;
 import hu.ppke.itk.ai.controller.MapController;
 import hu.ppke.itk.ai.model.Map;
-import hu.ppke.itk.ai.view.MapView;
+import hu.ppke.itk.ai.view.MapFrame;
 
 import java.io.IOException;
 
@@ -13,13 +13,13 @@ public class App
     private MapController mapController;
 
     private App() {
-        MapView mapView = new MapView();
-        mapView.setTitle("MapView");
-        mapView.setVisible(true);
+        MapFrame mapFrame = new MapFrame();
+        mapFrame.setTitle("MapView");
+        mapFrame.setVisible(true);
 
         Map mapModel = new Map();
 
-        mapController = new MapController().setMapView(mapView).setMapModel(mapModel);
+        mapController = new MapController().setMapView(mapFrame.getMapView()).setMapModel(mapModel);
         mapController.updateView();
     }
 

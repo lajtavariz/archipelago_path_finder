@@ -40,7 +40,7 @@ public class MapController {
     }
 
     public void updateView () {
-        mapView.drawMap(mapModel);
+        mapView.updateMap(mapModel);
     }
 
     public MapController setMapModel(Map mapModel) {
@@ -63,7 +63,7 @@ public class MapController {
                     updateView();
                 }
             } catch (InterruptedException exc) {
-                System.out.println(exc);
+                System.err.println(exc);
             }
         }
     }
