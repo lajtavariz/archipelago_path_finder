@@ -40,7 +40,7 @@ public class MapController {
     }
 
     public void updateView () {
-        mapView.updateMap(mapModel);
+        mapView.update();
     }
 
     public MapController setMapModel(Map mapModel) {

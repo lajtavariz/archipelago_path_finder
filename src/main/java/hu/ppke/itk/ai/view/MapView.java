@@ -5,18 +5,18 @@ import hu.ppke.itk.ai.model.Map;
 import hu.ppke.itk.ai.model.Node;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static hu.ppke.itk.ai.model.Category.*;
 import static java.awt.Color.*;
 
-public class MapView extends JPanel implements ActionListener {
+public class MapView extends JPanel implements ActionListener, Observer {
 
     private Map map;
     private java.util.Map<Category, Color> categoryToColor;
@@ -84,9 +84,17 @@ public class MapView extends JPanel implements ActionListener {
         }
     }
 
-    public void updateMap(Map map) {
-        this.map = map;
-        pixelSize = map.getPixelSize();
+    public void update() {
         worker.execute();
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        worker.execute();
+    }
+
+    public MapView setMap(Map map) {
+        this.map = map;
+        return this;
     }
 }

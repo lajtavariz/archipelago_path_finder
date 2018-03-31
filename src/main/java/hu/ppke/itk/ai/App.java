@@ -5,6 +5,7 @@ import asg.cliche.ShellFactory;
 import hu.ppke.itk.ai.controller.MapController;
 import hu.ppke.itk.ai.model.Map;
 import hu.ppke.itk.ai.view.MapFrame;
+import hu.ppke.itk.ai.view.MapView;
 
 import java.io.IOException;
 
@@ -18,8 +19,11 @@ public class App
         mapFrame.setVisible(true);
 
         Map mapModel = new Map();
+        MapView mapView = mapFrame.getMapView();
+        mapModel.addObserver(mapView);
+        mapView.setMap(mapModel);
 
-        mapController = new MapController().setMapView(mapFrame.getMapView()).setMapModel(mapModel);
+        mapController = new MapController().setMapModel(mapModel).setMapView(mapView);
         mapController.updateView();
     }
 
@@ -54,7 +58,6 @@ public class App
     @Command
     public void makeStep(int direction) {
         mapController.makeStepWithAgent(direction);
-        mapController.updateView();
     }
 
     public static void main(String[] args ) throws IOException

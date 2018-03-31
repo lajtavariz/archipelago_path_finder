@@ -4,12 +4,13 @@ import hu.ppke.itk.ai.lib.OpenSimplexNoise;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 import java.util.Random;
 
 import static hu.ppke.itk.ai.config.Config.*;
 import static hu.ppke.itk.ai.model.Category.*;
 
-public class Map {
+public class Map extends Observable {
 
     private int canvasSize;
     private int pixelSize;
@@ -52,17 +53,17 @@ public class Map {
     public void setPixelSize(int pixelSize) {
         this.pixelSize = pixelSize;
         nrOfPixelsInARow = calculateNrOfPixelsInARow();
-        nodes = reGenerateNodes();
+        reGenerateNodes();
     }
 
     public void setThreshold(float threshold) {
         this.threshold = threshold;
-        nodes = reGenerateNodes();
+        reGenerateNodes();
     }
 
-    public List<Node> reGenerateNodes() {
+    public void reGenerateNodes() {
         noise = getNoiseWithNewSeed();
-        return generateNodes();
+        nodes = generateNodes();
     }
 
     private List<Node> generateNodes() {
@@ -142,6 +143,8 @@ public class Map {
                 evaluateChangesForStep(agentNode.getWestNeighb());
                 break;
         }
+        setChanged();
+        notifyObservers();
     }
 
     private void evaluateChangesForStep(Node neighb) {
