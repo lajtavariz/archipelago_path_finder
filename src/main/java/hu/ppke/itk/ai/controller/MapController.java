@@ -58,9 +58,8 @@ public class MapController {
         public void run() {
             try {
                 while (true) {
-                    Thread.sleep(40);
+                    Thread.sleep(20);
                     mapModel.makeRandomStepWithAgent();
-                    updateView();
                 }
             } catch (InterruptedException exc) {
                 System.err.println(exc);

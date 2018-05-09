@@ -40,6 +40,8 @@ public class MapModel extends Observable {
         nrOfPixelsInARow = calculateNrOfPixelsInARow();
         noise = getNoiseWithNewSeed();
         nodes = generateNodes();
+
+        setToChangedAndNotifyObservers();
     }
 
     private int calculateNrOfPixelsInARow() {
@@ -54,21 +56,27 @@ public class MapModel extends Observable {
         this.pixelSize = pixelSize;
         nrOfPixelsInARow = calculateNrOfPixelsInARow();
         reGenerateNodes();
+
+        setToChangedAndNotifyObservers();
     }
 
     public void setThreshold(float threshold) {
         this.threshold = threshold;
         reGenerateNodes();
+
+        setToChangedAndNotifyObservers();
     }
 
     public void reGenerateNodes() {
         noise = getNoiseWithNewSeed();
         nodes = generateNodes();
+
+        setToChangedAndNotifyObservers();
     }
 
     private List<Node> generateNodes() {
         agentNode = null;
-        List<Node> nodeList = new ArrayList<Node>();
+        List<Node> nodeList = new ArrayList<>();
         for (int y = 0; y < nrOfPixelsInARow; y++) {
             for (int x = 0; x < nrOfPixelsInARow; x++) {
                 double noiseValue = noise.eval(x, y);
@@ -143,8 +151,8 @@ public class MapModel extends Observable {
                 evaluateChangesForStep(agentNode.getWestNeighb());
                 break;
         }
-        setChanged();
-        notifyObservers();
+
+        setToChangedAndNotifyObservers();
     }
 
     private void evaluateChangesForStep(Node neighb) {
@@ -152,6 +160,11 @@ public class MapModel extends Observable {
             agentNode.setCategory(WATER);
             agentNode = neighb.setCategory(AGENT);
         }
+    }
+
+    private void setToChangedAndNotifyObservers() {
+        setChanged();
+        notifyObservers();
     }
 
     public List<Node> getNodes() {

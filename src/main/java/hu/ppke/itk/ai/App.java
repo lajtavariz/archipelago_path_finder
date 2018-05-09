@@ -30,19 +30,16 @@ public class App
     @Command
     public void changeThreshold(float threshold) {
         mapController.changeThreshold(threshold);
-        mapController.updateView();
     }
 
     @Command
     public void changePixelSize(int pixelSize) {
         mapController.changePixelSize(pixelSize);
-        mapController.updateView();
     }
 
     @Command
     public void regenerateMap() {
         mapController.regenerateMap();
-        mapController.updateView();
     }
 
     @Command
