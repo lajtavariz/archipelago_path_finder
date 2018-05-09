@@ -6,14 +6,14 @@ import junit.framework.TestSuite;
 
 import java.util.List;
 
-public class MapTest extends TestCase {
+public class MapModelTest extends TestCase {
 
-    public MapTest(String testName) {
+    public MapModelTest(String testName) {
         super(testName);
     }
 
     public static Test suite() {
-        return new TestSuite(MapTest.class);
+        return new TestSuite(MapModelTest.class);
     }
 
     public void test2x2MapGraph() {
@@ -37,8 +37,8 @@ public class MapTest extends TestCase {
     }
 
     private void evaluateNodeNeighborsForNxNMap(int N) {
-        Map map = new Map(N, 1);
-        List<Node> nodes = map.getNodes();
+        MapModel mapModel = new MapModel(N, 1);
+        List<Node> nodes = mapModel.getNodes();
 
         assertEquals(N * N, nodes.size());
 

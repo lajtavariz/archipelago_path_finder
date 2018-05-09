@@ -1,7 +1,7 @@
 package hu.ppke.itk.ai.view;
 
 import hu.ppke.itk.ai.model.Category;
-import hu.ppke.itk.ai.model.Map;
+import hu.ppke.itk.ai.model.MapModel;
 import hu.ppke.itk.ai.model.Node;
 
 import javax.swing.*;
@@ -13,22 +13,72 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import static hu.ppke.itk.ai.config.Config.DEFAULT_PIXEL_SIZE;
 import static hu.ppke.itk.ai.model.Category.*;
 import static java.awt.Color.*;
 
 public class MapView extends JPanel implements ActionListener, Observer {
 
-    private Map map;
+    private MapModel mapModel;
     private java.util.Map<Category, Color> categoryToColor;
     private List<PixelDTO> pixels;
     private int pixelSize;
-    private SwingWorker worker = new SwingWorker<List<PixelDTO>, Void>() {
+    private SwingWorker worker = new MapWorker();
+
+    MapView() {
+        categoryToColor = new HashMap<Category, Color>();
+        categoryToColor.put(LAND, GREEN);
+        categoryToColor.put(WATER, BLUE);
+        categoryToColor.put(AGENT, RED);
+
+        pixels = new ArrayList<PixelDTO>();
+        pixelSize = DEFAULT_PIXEL_SIZE;
+
+        Timer timer = new Timer(40, this);
+        timer.start();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (!worker.isDone()) {
+            return;
+        }
+        repaint();
+    }
+
+    public void update() {
+        worker = new MapWorker();
+        worker.execute();
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+
+        for (PixelDTO pixel : pixels) {
+            g.setColor(pixel.getColor());
+            g.fillRect(pixel.getX(), pixel.getY(), pixelSize, pixelSize);
+
+        }
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        worker = new MapWorker();
+        worker.execute();
+    }
+
+    public MapView setMapModel(MapModel mapModel) {
+        this.mapModel = mapModel;
+        return this;
+    }
+
+    private class MapWorker extends SwingWorker<List<PixelDTO>, Object> {
 
         @Override
         protected List<PixelDTO> doInBackground() {
             List<PixelDTO> pixelList = new ArrayList<PixelDTO>();
-            if (map != null) {
-                for (Node currentNode : map.getNodes()) {
+            if (mapModel != null) {
+                for (Node currentNode : mapModel.getNodes()) {
                     Color color = categoryToColor.get(currentNode.getCategory());
                     if (color == null) {
                         color = WHITE;
@@ -51,50 +101,5 @@ public class MapView extends JPanel implements ActionListener, Observer {
                 System.err.println("Error while generating the pixels: " + e);
             }
         }
-    };
-
-    MapView() {
-
-        categoryToColor = new HashMap<Category, Color>();
-        categoryToColor.put(LAND, GREEN);
-        categoryToColor.put(WATER, BLUE);
-        categoryToColor.put(AGENT, RED);
-
-        pixels = new ArrayList<PixelDTO>();
-        pixelSize = 0;
-
-        Timer timer = new Timer(40, this);
-        timer.start();
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        if (!worker.isDone()) {
-            return;
-        }
-        repaint();
-    }
-
-    @Override
-    public void paintComponent(Graphics g) {
-
-        for (PixelDTO pixel : pixels) {
-            g.setColor(pixel.getColor());
-            g.fillRect(pixel.getX(), pixel.getY(), pixelSize, pixelSize);
-
-        }
-    }
-
-    public void update() {
-        worker.execute();
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-        worker.execute();
-    }
-
-    public MapView setMap(Map map) {
-        this.map = map;
-        return this;
     }
 }

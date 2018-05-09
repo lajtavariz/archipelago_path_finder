@@ -3,7 +3,7 @@ package hu.ppke.itk.ai;
 import asg.cliche.Command;
 import asg.cliche.ShellFactory;
 import hu.ppke.itk.ai.controller.MapController;
-import hu.ppke.itk.ai.model.Map;
+import hu.ppke.itk.ai.model.MapModel;
 import hu.ppke.itk.ai.view.MapFrame;
 import hu.ppke.itk.ai.view.MapView;
 
@@ -18,10 +18,10 @@ public class App
         mapFrame.setTitle("MapView");
         mapFrame.setVisible(true);
 
-        Map mapModel = new Map();
+        MapModel mapModel = new MapModel();
         MapView mapView = mapFrame.getMapView();
         mapModel.addObserver(mapView);
-        mapView.setMap(mapModel);
+        mapView.setMapModel(mapModel);
 
         mapController = new MapController().setMapModel(mapModel).setMapView(mapView);
         mapController.updateView();

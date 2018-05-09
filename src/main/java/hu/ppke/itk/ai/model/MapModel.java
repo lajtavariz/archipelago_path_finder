@@ -10,7 +10,7 @@ import java.util.Random;
 import static hu.ppke.itk.ai.config.Config.*;
 import static hu.ppke.itk.ai.model.Category.*;
 
-public class Map extends Observable {
+public class MapModel extends Observable {
 
     private int canvasSize;
     private int pixelSize;
@@ -22,14 +22,14 @@ public class Map extends Observable {
 
     private List<Node> nodes;
 
-    public Map() {
+    public MapModel() {
         canvasSize = DEFAULT_CANVAS_SIZE;
         pixelSize = DEFAULT_PIXEL_SIZE;
         threshold = DEFAULT_THRESHOLD;
         init();
     }
 
-    public Map(int canvasSize, int pixelSize) {
+    public MapModel(int canvasSize, int pixelSize) {
         this.canvasSize = canvasSize;
         this.pixelSize = pixelSize;
         threshold = DEFAULT_THRESHOLD;

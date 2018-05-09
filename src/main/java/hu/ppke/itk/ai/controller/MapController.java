@@ -1,11 +1,11 @@
 package hu.ppke.itk.ai.controller;
 
-import hu.ppke.itk.ai.model.Map;
+import hu.ppke.itk.ai.model.MapModel;
 import hu.ppke.itk.ai.view.MapView;
 
 public class MapController {
 
-    private Map mapModel;
+    private MapModel mapModel;
     private MapView mapView;
     private Thread thread;
 
@@ -43,7 +43,7 @@ public class MapController {
         mapView.update();
     }
 
-    public MapController setMapModel(Map mapModel) {
+    public MapController setMapModel(MapModel mapModel) {
         this.mapModel = mapModel;
         return this;
     }
