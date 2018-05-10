@@ -21,6 +21,9 @@ public class MapModel extends Observable {
     private OpenSimplexNoise noise;
     private Node agentNode;
 
+    private Thread thread;
+    private RandomWalk randomWalk;
+
     private List<Node> nodes;
 
     public MapModel() {
@@ -139,7 +142,24 @@ public class MapModel extends Observable {
         return nodeList;
     }
 
-    public void makeRandomStepWithAgent() {
+    public void startRandomWalkWithAgent() {
+        randomWalk = new RandomWalk();
+        thread = new Thread(randomWalk);
+        thread.start();
+    }
+
+    public void stopRandomWalWithAgent() {
+        try {
+            if (thread != null) {
+                randomWalk.terminate();
+                thread.join();
+            }
+        } catch (Exception exc) {
+            System.err.println(exc);
+        }
+    }
+
+    private void makeRandomStepWithAgent() {
         Random rand = new Random(System.currentTimeMillis());
         int n = rand.nextInt(100000) % 4;
 
@@ -165,6 +185,7 @@ public class MapModel extends Observable {
         setToChangedAndNotifyObservers();
     }
 
+
     private void evaluateChangesForStep(Node neighb) {
         if (neighb != null && !LAND.equals(neighb.getCategory())) {
             agentNode.setCategory(WATER);
@@ -181,7 +202,23 @@ public class MapModel extends Observable {
         return nodes;
     }
 
-    public int getPixelSize() {
-        return pixelSize;
+    private class RandomWalk implements Runnable {
+        private volatile boolean running = true;
+
+        public void terminate() {
+            running = false;
+        }
+
+        public void run() {
+            try {
+                while (running) {
+                    Thread.sleep(20);
+                    makeRandomStepWithAgent();
+                }
+            } catch (InterruptedException exc) {
+                System.err.println(exc);
+                running = false;
+            }
+        }
     }
 }
