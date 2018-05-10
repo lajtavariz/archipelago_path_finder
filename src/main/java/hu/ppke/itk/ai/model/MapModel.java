@@ -1,10 +1,13 @@
 package hu.ppke.itk.ai.model;
 
-import hu.ppke.itk.ai.lib.OpenSimplexNoise;
+import hu.ppke.itk.ai.model.search.AbstractSearch;
+import hu.ppke.itk.ai.model.search.BFS;
+import hu.ppke.itk.ai.model.search.RandomWalk;
+import hu.ppke.itk.ai.noise.OpenSimplexNoise;
 
-import java.util.*;
-import java.util.concurrent.LinkedTransferQueue;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
 
 import static hu.ppke.itk.ai.config.Config.*;
 import static hu.ppke.itk.ai.model.Category.*;
@@ -145,7 +148,8 @@ public class MapModel extends Observable {
     }
 
     public void startRandomWalkWithAgent() {
-        startComputation(new RandomWalk());
+        randomWalk = new RandomWalk(this);
+        startComputation(randomWalk);
     }
 
     public void stopRandomWalWithAgent() {
@@ -153,30 +157,23 @@ public class MapModel extends Observable {
     }
 
     public void startBFS() {
-        startComputation(new BFS());
+        bfs = new BFS(this);
+        startComputation(bfs);
     }
 
     public void stopBFS() {
         stopComputation(bfs);
     }
 
-    private void startComputation(AbstractSearch abstractSearch) {
-        if (abstractSearch instanceof RandomWalk) {
-            randomWalk = new RandomWalk();
-            thread = new Thread(randomWalk);
-        } else if (abstractSearch instanceof BFS) {
-            bfs = new BFS();
-            thread = new Thread(bfs);
-        } else {
-            throw new UnsupportedOperationException("Computation is not yet supported!");
-        }
+    private <T extends AbstractSearch> void startComputation(T search) {
+        thread = new Thread(search);
         thread.start();
     }
 
-    private void stopComputation(AbstractSearch abstractSearch) {
+    private <T extends AbstractSearch> void stopComputation(T search) {
         try {
             if (thread != null) {
-                abstractSearch.terminate();
+                search.terminate();
                 thread.join();
             }
         } catch (Exception exc) {
@@ -203,7 +200,6 @@ public class MapModel extends Observable {
         setToChangedAndNotifyObservers();
     }
 
-
     private void evaluateChangesForStep(Node neighb) {
         if (neighb != null && !LAND.equals(neighb.getCategory())) {
             agentNode.setCategory(WATER);
@@ -211,7 +207,7 @@ public class MapModel extends Observable {
         }
     }
 
-    private void setToChangedAndNotifyObservers() {
+    public void setToChangedAndNotifyObservers() {
         setChanged();
         notifyObservers();
     }
@@ -220,78 +216,11 @@ public class MapModel extends Observable {
         return nodes;
     }
 
-    private void makeRandomStepWithAgent() {
-        Random rand = new Random(System.currentTimeMillis());
-        int n = rand.nextInt(100000) % 4;
-
-        makeStep(n);
+    public Node getStartNode() {
+        return startNode;
     }
 
-    private abstract class AbstractSearch implements Runnable {
-        volatile boolean running = true;
-
-        void terminate() {
-            running = false;
-        }
-
-        public void run() {
-            try {
-                while (running) {
-                    Thread.sleep(40);
-                    makeStep();
-                }
-            } catch (InterruptedException exc) {
-                System.err.println(exc);
-                running = false;
-            }
-        }
-
-        abstract void makeStep();
-    }
-
-    private class RandomWalk extends AbstractSearch {
-        @Override
-        void makeStep() {
-            makeRandomStepWithAgent();
-        }
-    }
-
-    private class BFS extends AbstractSearch {
-
-        Queue<Node> nodesQueue = new LinkedTransferQueue<>();
-
-        BFS() {
-            nodesQueue.add(startNode);
-            startNode.setVisited(true);
-        }
-
-        @Override
-        void makeStep() {
-            agentNode.setCategory(WATER);
-            if (!nodesQueue.isEmpty()) {
-                Node currentNode = nodesQueue.remove();
-                if (currentNode.getCategory().equals(GOAL)) {
-                    stopBFS();
-                } else {
-                    agentNode = currentNode.setCategory(AGENT).setVisited(true);
-                    System.out.println("Expanding node x: " + agentNode.getxPos() + ", y: " + agentNode.getyPos());
-                    addElementsToNodesQueue(nodesQueue, agentNode.getAllNeighbors());
-                }
-            } else {
-                stopBFS();
-            }
-            setToChangedAndNotifyObservers();
-        }
-
-        private void addElementsToNodesQueue(Queue<Node> nodesQueue, List<Node> neighbors) {
-            List<Node> filteredNeighbors = neighbors.stream()
-                    .filter(p -> p != null && !p.isVisited() && !p.getCategory().equals(LAND)).collect(Collectors.toList());
-
-            for (Node node : filteredNeighbors) {
-                if (!nodesQueue.contains(node)) {
-                    nodesQueue.add(node);
-                }
-            }
-        }
+    public Node getAgentNode() {
+        return agentNode;
     }
 }
