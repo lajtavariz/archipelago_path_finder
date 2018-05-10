@@ -30,6 +30,7 @@ public class MapView extends JPanel implements ActionListener, Observer {
         categoryToColor.put(LAND, GREEN);
         categoryToColor.put(WATER, BLUE);
         categoryToColor.put(AGENT, RED);
+        categoryToColor.put(GOAL, BLACK);
 
         pixels = new ArrayList<PixelDTO>();
         pixelSize = DEFAULT_PIXEL_SIZE;

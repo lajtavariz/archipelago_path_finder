@@ -15,6 +15,7 @@ public class MapModel extends Observable {
     private int canvasSize;
     private int pixelSize;
     private float threshold;
+    private double goalNodeThreshold;
     private int nrOfPixelsInARow;
 
     private OpenSimplexNoise noise;
@@ -26,6 +27,7 @@ public class MapModel extends Observable {
         canvasSize = DEFAULT_CANVAS_SIZE;
         pixelSize = DEFAULT_PIXEL_SIZE;
         threshold = DEFAULT_THRESHOLD;
+        goalNodeThreshold = DEFAULT_GOAL_NODE_THRESHOLD;
         init();
     }
 
@@ -33,6 +35,7 @@ public class MapModel extends Observable {
         this.canvasSize = canvasSize;
         this.pixelSize = pixelSize;
         threshold = DEFAULT_THRESHOLD;
+        goalNodeThreshold = DEFAULT_GOAL_NODE_THRESHOLD;
         init();
     }
 
@@ -76,6 +79,7 @@ public class MapModel extends Observable {
 
     private List<Node> generateNodes() {
         agentNode = null;
+        boolean hasTheGoalNodeBeenPlaced = false;
         List<Node> nodeList = new ArrayList<>();
         for (int y = 0; y < nrOfPixelsInARow; y++) {
             for (int x = 0; x < nrOfPixelsInARow; x++) {
@@ -88,6 +92,12 @@ public class MapModel extends Observable {
                     if (agentNode == null) {
                         agentNode = new Node(x, y, AGENT);
                         nodeList.add(agentNode);
+
+                        // if we passed the threshold we place the goal node
+                    } else if ((y > nrOfPixelsInARow * goalNodeThreshold)
+                            && (x > nrOfPixelsInARow * goalNodeThreshold) && !hasTheGoalNodeBeenPlaced) {
+                        nodeList.add(new Node(x, y, GOAL));
+                        hasTheGoalNodeBeenPlaced = true;
                     } else {
                         nodeList.add(new Node(x, y, WATER));
                     }
