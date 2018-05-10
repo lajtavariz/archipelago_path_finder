@@ -28,6 +28,14 @@ public class MapController {
         mapModel.stopRandomWalWithAgent();
     }
 
+    public void startBFS() {
+        mapModel.startBFS();
+    }
+
+    public void stopBFS() {
+        mapModel.stopBFS();
+    }
+
     public void makeStepWithAgent(int direction) {
         mapModel.makeStep(direction);
     }

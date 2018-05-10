@@ -53,6 +53,16 @@ public class App
     }
 
     @Command
+    public void startBFS() {
+        mapController.startBFS();
+    }
+
+    @Command
+    public void stopBFS() {
+        mapController.stopBFS();
+    }
+
+    @Command
     public void makeStep(int direction) {
         mapController.makeStepWithAgent(direction);
     }
