@@ -26,4 +26,9 @@ public class Config {
      */
     public static final double DEFAULT_GOAL_NODE_THRESHOLD = 0.7;
 
+    /**
+     * Default thread sleep time in ms
+     */
+    public static final int DEFAULT_SLEEP_TIME = 200;
+
 }

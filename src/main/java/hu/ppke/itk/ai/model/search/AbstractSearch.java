@@ -2,6 +2,8 @@ package hu.ppke.itk.ai.model.search;
 
 import hu.ppke.itk.ai.model.MapModel;
 
+import static hu.ppke.itk.ai.config.Config.DEFAULT_SLEEP_TIME;
+
 public abstract class AbstractSearch implements Runnable {
     protected MapModel mapModel;
     private volatile boolean running = true;
@@ -17,7 +19,7 @@ public abstract class AbstractSearch implements Runnable {
     public void run() {
         try {
             while (running) {
-                Thread.sleep(100);
+                Thread.sleep(DEFAULT_SLEEP_TIME);
                 makeStep();
             }
         } catch (InterruptedException exc) {
@@ -26,5 +28,5 @@ public abstract class AbstractSearch implements Runnable {
         }
     }
 
-    protected abstract void makeStep();
+    protected abstract void makeStep() throws InterruptedException;
 }
