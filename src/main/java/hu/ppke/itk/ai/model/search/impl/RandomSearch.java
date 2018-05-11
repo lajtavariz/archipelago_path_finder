@@ -1,12 +1,13 @@
-package hu.ppke.itk.ai.model.search;
+package hu.ppke.itk.ai.model.search.impl;
 
 import hu.ppke.itk.ai.model.MapModel;
+import hu.ppke.itk.ai.model.search.AbstractSearch;
 
 import java.util.Random;
 
-public class RandomWalk extends AbstractSearch {
+public class RandomSearch extends AbstractSearch {
 
-    public RandomWalk(MapModel mapModel) {
+    public RandomSearch(MapModel mapModel) {
         super(mapModel);
     }
 

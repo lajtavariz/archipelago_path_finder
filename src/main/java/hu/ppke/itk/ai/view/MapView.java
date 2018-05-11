@@ -73,6 +73,11 @@ public class MapView extends JPanel implements ActionListener, Observer {
         return this;
     }
 
+    public MapView setPixelSize(int pixelSize) {
+        this.pixelSize = pixelSize;
+        return this;
+    }
+
     private class MapWorker extends SwingWorker<List<PixelDTO>, Object> {
 
         @Override

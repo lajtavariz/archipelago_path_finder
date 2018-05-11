@@ -1,8 +1,9 @@
 package hu.ppke.itk.ai.model;
 
 import hu.ppke.itk.ai.model.search.AbstractSearch;
-import hu.ppke.itk.ai.model.search.BFS;
-import hu.ppke.itk.ai.model.search.RandomWalk;
+import hu.ppke.itk.ai.model.search.impl.BFS;
+import hu.ppke.itk.ai.model.search.impl.DFS;
+import hu.ppke.itk.ai.model.search.impl.RandomSearch;
 import hu.ppke.itk.ai.noise.OpenSimplexNoise;
 
 import java.util.ArrayList;
@@ -25,8 +26,9 @@ public class MapModel extends Observable {
     private Node startNode;
 
     private Thread thread;
-    private RandomWalk randomWalk;
+    private RandomSearch randomSearch;
     private BFS bfs;
+    private DFS dfs;
 
     private List<Node> nodes;
 
@@ -148,12 +150,12 @@ public class MapModel extends Observable {
     }
 
     public void startRandomWalkWithAgent() {
-        randomWalk = new RandomWalk(this);
-        startComputation(randomWalk);
+        randomSearch = new RandomSearch(this);
+        startComputation(randomSearch);
     }
 
     public void stopRandomWalWithAgent() {
-        stopComputation(randomWalk);
+        stopComputation(randomSearch);
     }
 
     public void startBFS() {
@@ -163,6 +165,15 @@ public class MapModel extends Observable {
 
     public void stopBFS() {
         stopComputation(bfs);
+    }
+
+    public void startDFS() {
+        dfs = new DFS(this);
+        startComputation(dfs);
+    }
+
+    public void stopDFS() {
+        stopComputation(dfs);
     }
 
     private <T extends AbstractSearch> void startComputation(T search) {

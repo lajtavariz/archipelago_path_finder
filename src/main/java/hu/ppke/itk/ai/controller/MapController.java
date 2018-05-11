@@ -14,6 +14,8 @@ public class MapController {
 
     public void changePixelSize(int pixelSize) {
         mapModel.setPixelSize(pixelSize);
+        mapView.setPixelSize(pixelSize);
+        mapView.update();
     }
 
     public void changeThreshold(float threshold) {
@@ -34,6 +36,14 @@ public class MapController {
 
     public void stopBFS() {
         mapModel.stopBFS();
+    }
+
+    public void startDFS() {
+        mapModel.startDFS();
+    }
+
+    public void stopDFS() {
+        mapModel.stopDFS();
     }
 
     public void makeStepWithAgent(int direction) {

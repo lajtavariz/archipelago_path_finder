@@ -3,7 +3,7 @@ package hu.ppke.itk.ai.model.search;
 import hu.ppke.itk.ai.model.MapModel;
 
 public abstract class AbstractSearch implements Runnable {
-    MapModel mapModel;
+    protected MapModel mapModel;
     private volatile boolean running = true;
 
     public AbstractSearch(MapModel mapModel) {
@@ -17,7 +17,7 @@ public abstract class AbstractSearch implements Runnable {
     public void run() {
         try {
             while (running) {
-                Thread.sleep(40);
+                Thread.sleep(100);
                 makeStep();
             }
         } catch (InterruptedException exc) {

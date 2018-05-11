@@ -63,6 +63,16 @@ public class App
     }
 
     @Command
+    public void startDFS() {
+        mapController.startDFS();
+    }
+
+    @Command
+    public void stopDFS() {
+        mapController.stopDFS();
+    }
+
+    @Command
     public void makeStep(int direction) {
         mapController.makeStepWithAgent(direction);
     }
