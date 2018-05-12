@@ -35,19 +35,23 @@ public abstract class GenericGraphSearch<T extends IContainer<Node>> extends Abs
     protected void makeStep() throws InterruptedException {
         if (!nodes.isEmpty()) {
             Node currentNode = nodes.pop();
-            if (currentNode.getCategory().equals(GOAL)) {
-                mapModel.stopSearch(algorithm);
-            } else {
-                if (!currentNode.equals(agentNode) && !agentNode.isWaterNeighbor(currentNode)) {
-                    makeSteps(getRouteToCurrentNode(currentNode, agentNode));
-                }
 
-                agentNode.setCategory(WATER);
-                agentNode = currentNode.setCategory(AGENT).setVisited(true);
-                addElementsToContainer(nodes, agentNode);
-
+            if (!currentNode.equals(agentNode) && !agentNode.isWaterNeighbor(currentNode)) {
+                makeSteps(getRouteToCurrentNode(currentNode, agentNode));
             }
+
+            agentNode.setCategory(WATER);
+            agentNode = currentNode.setCategory(AGENT).setVisited(true);
+            if (agentNode.isOneOfTheNeighborsTheGoal()) {
+                System.out.println("Goal has been found!");
+                mapModel.setToChangedAndNotifyObservers();
+                Thread.sleep(1000);
+                mapModel.stopSearch(algorithm);
+            }
+            addElementsToContainer(nodes, agentNode);
+
         } else {
+            System.out.println("Data structure is empty. The algorithm is now stopped.");
             mapModel.stopSearch(algorithm);
         }
         mapModel.setToChangedAndNotifyObservers();

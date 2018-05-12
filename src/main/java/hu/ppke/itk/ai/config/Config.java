@@ -13,22 +13,22 @@ public class Config {
     /**
      * Default size of one pixel on the map.
      */
-    public static final int DEFAULT_PIXEL_SIZE = 40;
+    public static final int DEFAULT_PIXEL_SIZE = 100;
 
     /**
      * Default threshold. It determines the ratio of land and water.
      * Should be set between -1 and 1
      */
-    public static final float DEFAULT_THRESHOLD = 0.4f;
+    public static final float DEFAULT_THRESHOLD = 1.0f;
 
     /**
      * This number specifies where the goal node will be placed.
      */
-    public static final double DEFAULT_GOAL_NODE_THRESHOLD = 0.7;
+    public static final double DEFAULT_GOAL_NODE_THRESHOLD = 0.3;
 
     /**
      * Default thread sleep time in ms
      */
-    public static final int DEFAULT_SLEEP_TIME = 200;
+    public static final int DEFAULT_SLEEP_TIME = 500;
 
 }

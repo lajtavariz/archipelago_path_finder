@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static hu.ppke.itk.ai.enumeration.Category.GOAL;
 import static hu.ppke.itk.ai.enumeration.Category.LAND;
 
 public class Node {
@@ -60,6 +61,10 @@ public class Node {
         }
 
         return ancestors;
+    }
+
+    public boolean isOneOfTheNeighborsTheGoal() {
+        return getAllNeighbors().stream().anyMatch(p -> p != null && p.getCategory().equals(GOAL));
     }
 
     public int getxPos() {
