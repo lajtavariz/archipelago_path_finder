@@ -7,6 +7,8 @@ import static hu.ppke.itk.ai.config.Config.DEFAULT_SLEEP_TIME;
 public abstract class AbstractSearch implements Runnable {
     protected MapModel mapModel;
     private volatile boolean running = true;
+    protected int sleepTime = DEFAULT_SLEEP_TIME;
+    private int nrOfSteps = 0;
 
     public AbstractSearch(MapModel mapModel) {
         this.mapModel = mapModel;
@@ -19,7 +21,7 @@ public abstract class AbstractSearch implements Runnable {
     public void run() {
         try {
             while (running) {
-                Thread.sleep(DEFAULT_SLEEP_TIME);
+                Thread.sleep(sleepTime);
                 makeStep();
             }
         } catch (InterruptedException exc) {
@@ -29,4 +31,17 @@ public abstract class AbstractSearch implements Runnable {
     }
 
     protected abstract void makeStep() throws InterruptedException;
+
+    protected void increaseNrOfSteps() {
+        nrOfSteps++;
+    }
+
+    public AbstractSearch setSleepTime(int sleepTime) {
+        this.sleepTime = sleepTime;
+        return this;
+    }
+
+    public int getNrOfSteps() {
+        return nrOfSteps;
+    }
 }

@@ -196,6 +196,24 @@ public class MapModel extends Observable {
         }
     }
 
+    public void evaluateAlgorithms() throws InterruptedException {
+        float new_threshold = 0.0f;
+        for (int i = 0; i <= 10; i++) {
+            threshold = new_threshold;
+            reGenerateNodes();
+            new_threshold = new_threshold + 0.1f;
+
+            for (int j = 1; j <= 10; j++) {
+                bfs = (BFS) new BFS(this).setSleepTime(1);
+                startComputation(bfs);
+                thread.join();
+
+            }
+
+
+        }
+    }
+
     private <T extends AbstractSearch> void startComputation(T search) {
         thread = new Thread(search);
         thread.start();

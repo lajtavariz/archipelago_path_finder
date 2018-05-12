@@ -10,15 +10,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static hu.ppke.itk.ai.config.Config.DEFAULT_SLEEP_TIME;
 import static hu.ppke.itk.ai.enumeration.Category.*;
 
 public abstract class GenericGraphSearch<T extends IContainer<Node>> extends AbstractSearch {
 
     private T nodes;
     private Algorithm algorithm;
-
     private Node agentNode;
+
 
     protected GenericGraphSearch(MapModel mapModel, T nodes, Algorithm algorithm) {
         super(mapModel);
@@ -42,13 +41,16 @@ public abstract class GenericGraphSearch<T extends IContainer<Node>> extends Abs
 
             agentNode.setCategory(WATER);
             agentNode = currentNode.setCategory(AGENT).setVisited(true);
+
             if (agentNode.isOneOfTheNeighborsTheGoal()) {
                 System.out.println("Goal has been found!");
                 mapModel.setToChangedAndNotifyObservers();
                 Thread.sleep(1000);
                 mapModel.stopSearch(algorithm);
             }
+
             addElementsToContainer(nodes, agentNode);
+            increaseNrOfSteps();
 
         } else {
             System.out.println("Data structure is empty. The algorithm is now stopped.");
@@ -88,7 +90,8 @@ public abstract class GenericGraphSearch<T extends IContainer<Node>> extends Abs
             agentNode.setCategory(WATER);
             agentNode = node.setCategory(AGENT);
             mapModel.setToChangedAndNotifyObservers();
-            Thread.sleep(DEFAULT_SLEEP_TIME);
+            Thread.sleep(sleepTime);
+            increaseNrOfSteps();
         }
     }
 
