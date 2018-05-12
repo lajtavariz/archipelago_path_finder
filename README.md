@@ -8,5 +8,4 @@ Maven 3.3.9 or higher
 3. Run `java -jar` to run the application
 ## Run
 After you started the program, a window with a generated mapModel should appear. Inside the command line you can list all the
-available commands by using the`?list` command. In this prototype no search algorithms are implemented yet, only the random 
-walk which you can start by using the `srw` command. 
+available commands by using the`?list` command.
