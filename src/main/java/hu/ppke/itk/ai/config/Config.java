@@ -13,13 +13,13 @@ public class Config {
     /**
      * Default size of one pixel on the map.
      */
-    public static final int DEFAULT_PIXEL_SIZE = 100;
+    public static final int DEFAULT_PIXEL_SIZE = 60;
 
     /**
      * Default threshold. It determines the ratio of land and water.
      * Should be set between -1 and 1
      */
-    public static final float DEFAULT_THRESHOLD = 1.0f;
+    public static final float DEFAULT_THRESHOLD = 0.3f;
 
     /**
      * This number specifies where the goal node will be placed.
