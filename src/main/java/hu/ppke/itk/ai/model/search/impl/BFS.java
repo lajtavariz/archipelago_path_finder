@@ -7,6 +7,8 @@ import hu.ppke.itk.ai.model.search.container.QueueContainer;
 public class BFS extends GenericGraphSearch {
 
     public BFS(MapModel mapModel) {
+
+
         super(mapModel, new QueueContainer());
     }
 }

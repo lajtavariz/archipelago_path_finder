@@ -40,6 +40,13 @@ public class Node {
         return waterNeighbors.contains(currentNode);
     }
 
+    public double calculateDistanceToNode(Node node) {
+        double dX = (double) Math.abs(node.getxPos() - this.getxPos());
+        double dY = (double) Math.abs(node.getyPos() - this.getyPos());
+
+        return Math.sqrt(dX * dX + dY * dY);
+    }
+
     public int getxPos() {
         return xPos;
     }
