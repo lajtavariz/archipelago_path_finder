@@ -5,8 +5,8 @@ import hu.ppke.itk.ai.model.MapModel;
 import hu.ppke.itk.ai.model.Node;
 import hu.ppke.itk.ai.model.search.container.IContainer;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,47 +53,30 @@ public abstract class GenericGraphSearch<T extends IContainer<Node>> extends Abs
         mapModel.setToChangedAndNotifyObservers();
     }
 
-    private List<Node> getRouteToCurrentNode(Node nodeToReach, Node agentNode) throws InterruptedException {
-        List<Node> nodeToReachAncestors = new LinkedList<>();
-        List<Node> agentNodeAncestors = new LinkedList<>();
-        List<Node> pathToNodeToReach = new LinkedList<>();
+    private List<Node> getRouteToCurrentNode(Node nodeToReach, Node agentNode) {
+        List<Node> nodeToReachAncestors = nodeToReach.getAncestors();
+        List<Node> agentNodeAncestors = agentNode.getAncestors();
+        List<Node> wholePath = new ArrayList<>();
 
-        boolean hasCommonAncestorBeenFound = false;
+        for (Node nodeToReachAncestor : nodeToReachAncestors) {
+            if (agentNodeAncestors.contains(nodeToReachAncestor)) {
+                List<Node> path1 = agentNodeAncestors.stream()
+                        .filter(p -> agentNodeAncestors.indexOf(p) < agentNodeAncestors.indexOf(nodeToReachAncestor))
+                        .collect(Collectors.toList());
+                List<Node> path2 = nodeToReachAncestors.stream()
+                        .filter(p -> nodeToReachAncestors.indexOf(p) <= nodeToReachAncestors.indexOf(nodeToReachAncestor))
+                        .collect(Collectors.toList());
 
-        Node nodeToReachNextAncestor = nodeToReach.getAncestorNode();
-        Node agentNodeNextAncestor = agentNode.getAncestorNode();
+                wholePath.addAll(path1);
 
-        if (nodeToReachNextAncestor.equals(agentNodeNextAncestor)) {
-            hasCommonAncestorBeenFound = true;
-            pathToNodeToReach.add(agentNodeNextAncestor);
-        } else {
-            nodeToReachAncestors.add(nodeToReachNextAncestor);
-            agentNodeAncestors.add(agentNodeNextAncestor);
-        }
+                Collections.reverse(path2);
+                wholePath.addAll(path2);
 
-        while (!hasCommonAncestorBeenFound) {
-
-            if (nodeToReachNextAncestor.equals(agentNodeNextAncestor)) {
-                hasCommonAncestorBeenFound = true;
-
-                ((LinkedList<Node>) agentNodeAncestors).removeLast();
-                pathToNodeToReach.addAll(agentNodeAncestors);
-
-                Collections.reverse(nodeToReachAncestors);
-                pathToNodeToReach.addAll(nodeToReachAncestors);
-            } else {
-                if (nodeToReachNextAncestor.getAncestorNode() != null) {
-                    nodeToReachNextAncestor = nodeToReachNextAncestor.getAncestorNode();
-                    nodeToReachAncestors.add(nodeToReachNextAncestor);
-                }
-                if (agentNodeNextAncestor.getAncestorNode() != null) {
-                    agentNodeNextAncestor = agentNodeNextAncestor.getAncestorNode();
-                    agentNodeAncestors.add(agentNodeNextAncestor);
-                }
+                return wholePath;
             }
         }
 
-        return pathToNodeToReach;
+        return wholePath;
     }
 
     private void makeSteps(List<Node> pathToNode) throws InterruptedException {

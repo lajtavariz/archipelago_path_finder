@@ -2,6 +2,7 @@ package hu.ppke.itk.ai.model;
 
 import hu.ppke.itk.ai.enumeration.Category;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,6 +48,18 @@ public class Node {
         double dY = (double) Math.abs(node.getyPos() - this.getyPos());
 
         return Math.sqrt(dX * dX + dY * dY);
+    }
+
+    public List<Node> getAncestors() {
+        Node ancestor = this.getAncestorNode();
+        List<Node> ancestors = new ArrayList<>();
+
+        while (ancestor != null) {
+            ancestors.add(ancestor);
+            ancestor = ancestor.getAncestorNode();
+        }
+
+        return ancestors;
     }
 
     public int getxPos() {
