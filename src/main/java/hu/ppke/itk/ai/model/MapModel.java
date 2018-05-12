@@ -1,8 +1,10 @@
 package hu.ppke.itk.ai.model;
 
+import hu.ppke.itk.ai.enumeration.Algorithm;
 import hu.ppke.itk.ai.model.search.AbstractSearch;
 import hu.ppke.itk.ai.model.search.impl.BFS;
 import hu.ppke.itk.ai.model.search.impl.DFS;
+import hu.ppke.itk.ai.model.search.impl.GreedySearch;
 import hu.ppke.itk.ai.model.search.impl.RandomSearch;
 import hu.ppke.itk.ai.noise.OpenSimplexNoise;
 
@@ -11,7 +13,7 @@ import java.util.List;
 import java.util.Observable;
 
 import static hu.ppke.itk.ai.config.Config.*;
-import static hu.ppke.itk.ai.model.Category.*;
+import static hu.ppke.itk.ai.enumeration.Category.*;
 
 public class MapModel extends Observable {
 
@@ -24,11 +26,13 @@ public class MapModel extends Observable {
     private OpenSimplexNoise noise;
     private Node agentNode;
     private Node startNode;
+    private Node goalNode;
 
     private Thread thread;
     private RandomSearch randomSearch;
     private BFS bfs;
     private DFS dfs;
+    private GreedySearch greedy;
 
     private List<Node> nodes;
 
@@ -106,7 +110,8 @@ public class MapModel extends Observable {
                         // if we passed the threshold we place the goal node
                     } else if ((y > nrOfPixelsInARow * goalNodeThreshold)
                             && (x > nrOfPixelsInARow * goalNodeThreshold) && !hasTheGoalNodeBeenPlaced) {
-                        nodeList.add(new Node(x, y, GOAL));
+                        goalNode = new Node(x, y, GOAL);
+                        nodeList.add(goalNode);
                         hasTheGoalNodeBeenPlaced = true;
                     } else {
                         nodeList.add(new Node(x, y, WATER));
@@ -149,31 +154,46 @@ public class MapModel extends Observable {
         return nodeList;
     }
 
-    public void startRandomWalkWithAgent() {
-        randomSearch = new RandomSearch(this);
-        startComputation(randomSearch);
+    public void startSearch(Algorithm algorithm) {
+        switch (algorithm) {
+            case RANDOM:
+                randomSearch = new RandomSearch(this);
+                startComputation(randomSearch);
+                break;
+            case BFS:
+                bfs = new BFS(this);
+                startComputation(bfs);
+                break;
+            case DFS:
+                dfs = new DFS(this);
+                startComputation(dfs);
+                break;
+            case GREEDY:
+                greedy = new GreedySearch(this);
+                startComputation(greedy);
+                break;
+            default:
+                throw new UnsupportedOperationException("Algorithm " + algorithm + " is not yet supported.");
+        }
     }
 
-    public void stopRandomWalWithAgent() {
-        stopComputation(randomSearch);
-    }
-
-    public void startBFS() {
-        bfs = new BFS(this);
-        startComputation(bfs);
-    }
-
-    public void stopBFS() {
-        stopComputation(bfs);
-    }
-
-    public void startDFS() {
-        dfs = new DFS(this);
-        startComputation(dfs);
-    }
-
-    public void stopDFS() {
-        stopComputation(dfs);
+    public void stopSearch(Algorithm algorithm) {
+        switch (algorithm) {
+            case RANDOM:
+                stopComputation(randomSearch);
+                break;
+            case BFS:
+                stopComputation(bfs);
+                break;
+            case DFS:
+                stopComputation(dfs);
+                break;
+            case GREEDY:
+                stopComputation(greedy);
+                break;
+            default:
+                throw new UnsupportedOperationException("Algorithm " + algorithm + " is not yet supported.");
+        }
     }
 
     private <T extends AbstractSearch> void startComputation(T search) {
@@ -233,5 +253,9 @@ public class MapModel extends Observable {
 
     public Node getAgentNode() {
         return agentNode;
+    }
+
+    public Node getGoalNode() {
+        return goalNode;
     }
 }

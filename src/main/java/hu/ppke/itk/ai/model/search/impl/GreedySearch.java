@@ -1,13 +1,13 @@
 package hu.ppke.itk.ai.model.search.impl;
 
+import hu.ppke.itk.ai.enumeration.Algorithm;
 import hu.ppke.itk.ai.model.MapModel;
 import hu.ppke.itk.ai.model.search.GenericGraphSearch;
-import hu.ppke.itk.ai.model.search.container.IContainer;
+import hu.ppke.itk.ai.model.search.container.PriorityQueueContainer;
 
-public class GreedySearch extends GenericGraphSearch {
+public class GreedySearch extends GenericGraphSearch<PriorityQueueContainer> {
 
-
-    protected GreedySearch(MapModel mapModel, IContainer nodes) {
-        super(mapModel, nodes);
+    public GreedySearch(MapModel mapModel) {
+        super(mapModel, new PriorityQueueContainer(mapModel.getGoalNode()), Algorithm.GREEDY);
     }
 }

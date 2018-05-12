@@ -1,5 +1,6 @@
 package hu.ppke.itk.ai.model.search;
 
+import hu.ppke.itk.ai.enumeration.Algorithm;
 import hu.ppke.itk.ai.model.MapModel;
 import hu.ppke.itk.ai.model.Node;
 import hu.ppke.itk.ai.model.search.container.IContainer;
@@ -10,18 +11,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static hu.ppke.itk.ai.config.Config.DEFAULT_SLEEP_TIME;
-import static hu.ppke.itk.ai.model.Category.*;
+import static hu.ppke.itk.ai.enumeration.Category.*;
 
 public abstract class GenericGraphSearch<T extends IContainer<Node>> extends AbstractSearch {
 
     private T nodes;
+    private Algorithm algorithm;
 
     private Node agentNode;
 
-    protected GenericGraphSearch(MapModel mapModel, T nodes) {
+    protected GenericGraphSearch(MapModel mapModel, T nodes, Algorithm algorithm) {
         super(mapModel);
         agentNode = mapModel.getAgentNode();
         this.nodes = nodes;
+        this.algorithm = algorithm;
 
         Node startNode = mapModel.getStartNode();
         nodes.push(startNode);
@@ -33,7 +36,7 @@ public abstract class GenericGraphSearch<T extends IContainer<Node>> extends Abs
         if (!nodes.isEmpty()) {
             Node currentNode = nodes.pop();
             if (currentNode.getCategory().equals(GOAL)) {
-                mapModel.stopBFS();
+                mapModel.stopSearch(algorithm);
             } else {
                 if (!currentNode.equals(agentNode) && !agentNode.isWaterNeighbor(currentNode)) {
                     makeSteps(getRouteToCurrentNode(currentNode, agentNode));
@@ -45,7 +48,7 @@ public abstract class GenericGraphSearch<T extends IContainer<Node>> extends Abs
 
             }
         } else {
-            mapModel.stopBFS();
+            mapModel.stopSearch(algorithm);
         }
         mapModel.setToChangedAndNotifyObservers();
     }

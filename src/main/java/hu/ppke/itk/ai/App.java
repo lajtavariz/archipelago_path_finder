@@ -68,6 +68,16 @@ public class App
     }
 
     @Command
+    public void startGreedy() {
+        mapController.startGreedy();
+    }
+
+    @Command
+    public void stopGreedy() {
+        mapController.stopGreedy();
+    }
+
+    @Command
     public void stopDFS() {
         mapController.stopDFS();
     }

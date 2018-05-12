@@ -1,10 +1,12 @@
 package hu.ppke.itk.ai.model;
 
+import hu.ppke.itk.ai.enumeration.Category;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static hu.ppke.itk.ai.model.Category.LAND;
+import static hu.ppke.itk.ai.enumeration.Category.LAND;
 
 public class Node {
 

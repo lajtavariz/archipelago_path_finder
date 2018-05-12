@@ -1,6 +1,6 @@
 package hu.ppke.itk.ai.view;
 
-import hu.ppke.itk.ai.model.Category;
+import hu.ppke.itk.ai.enumeration.Category;
 import hu.ppke.itk.ai.model.MapModel;
 import hu.ppke.itk.ai.model.Node;
 
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static hu.ppke.itk.ai.config.Config.DEFAULT_PIXEL_SIZE;
-import static hu.ppke.itk.ai.model.Category.*;
+import static hu.ppke.itk.ai.enumeration.Category.*;
 import static java.awt.Color.*;
 
 public class MapView extends JPanel implements ActionListener, Observer {

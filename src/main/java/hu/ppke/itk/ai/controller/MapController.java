@@ -3,6 +3,8 @@ package hu.ppke.itk.ai.controller;
 import hu.ppke.itk.ai.model.MapModel;
 import hu.ppke.itk.ai.view.MapView;
 
+import static hu.ppke.itk.ai.enumeration.Algorithm.*;
+
 public class MapController {
 
     private MapModel mapModel;
@@ -23,27 +25,35 @@ public class MapController {
     }
 
     public void startRandomWalkWithAgent() {
-        mapModel.startRandomWalkWithAgent();
+        mapModel.startSearch(RANDOM);
     }
 
     public void stopRandomWalkWithAgent() {
-        mapModel.stopRandomWalWithAgent();
+        mapModel.stopSearch(RANDOM);
     }
 
     public void startBFS() {
-        mapModel.startBFS();
+        mapModel.startSearch(BFS);
     }
 
     public void stopBFS() {
-        mapModel.stopBFS();
+        mapModel.stopSearch(BFS);
     }
 
     public void startDFS() {
-        mapModel.startDFS();
+        mapModel.startSearch(DFS);
     }
 
     public void stopDFS() {
-        mapModel.stopDFS();
+        mapModel.stopSearch(DFS);
+    }
+
+    public void startGreedy() {
+        mapModel.startSearch(GREEDY);
+    }
+
+    public void stopGreedy() {
+        mapModel.stopSearch(GREEDY);
     }
 
     public void makeStepWithAgent(int direction) {

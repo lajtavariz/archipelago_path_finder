@@ -4,7 +4,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import static hu.ppke.itk.ai.model.Category.WATER;
+import static hu.ppke.itk.ai.enumeration.Category.WATER;
 
 public class NodeTest extends TestCase {
 
@@ -36,6 +36,4 @@ public class NodeTest extends TestCase {
 
         assertEquals(expectedDistance, distance);
     }
-
-
 }
