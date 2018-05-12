@@ -76,4 +76,12 @@ public class MapModelTest extends TestCase {
             assertEquals(expectedWestNeighb, currentNode.getWestNeighb());
         }
     }
+
+    public void testEvaluation() throws Exception {
+        MainEvaluator mainEvaluator = new MainEvaluator();
+
+        mainEvaluator.start();
+
+
+    }
 }

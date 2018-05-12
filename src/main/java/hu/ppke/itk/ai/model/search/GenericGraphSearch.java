@@ -46,7 +46,7 @@ public abstract class GenericGraphSearch<T extends IContainer<Node>> extends Abs
                 System.out.println("Goal has been found!");
                 mapModel.setToChangedAndNotifyObservers();
                 Thread.sleep(1000);
-                mapModel.stopSearch(algorithm);
+                mapModel.stopComputation(this);
             }
 
             addElementsToContainer(nodes, agentNode);
@@ -54,7 +54,7 @@ public abstract class GenericGraphSearch<T extends IContainer<Node>> extends Abs
 
         } else {
             System.out.println("Data structure is empty. The algorithm is now stopped.");
-            mapModel.stopSearch(algorithm);
+            mapModel.stopComputation(this);
         }
         mapModel.setToChangedAndNotifyObservers();
     }

@@ -83,6 +83,10 @@ public class MapModel extends Observable {
         setToChangedAndNotifyObservers();
     }
 
+    public float getThreshold() {
+        return threshold;
+    }
+
     public void reGenerateNodes() {
         noise = getNoiseWithNewSeed();
         nodes = generateNodes();
@@ -196,34 +200,19 @@ public class MapModel extends Observable {
         }
     }
 
-    public void evaluateAlgorithms() throws InterruptedException {
-        float new_threshold = 0.0f;
-        for (int i = 0; i <= 10; i++) {
-            threshold = new_threshold;
-            reGenerateNodes();
-            new_threshold = new_threshold + 0.1f;
-
-            for (int j = 1; j <= 10; j++) {
-                bfs = (BFS) new BFS(this).setSleepTime(1);
-                startComputation(bfs);
-                thread.join();
-
-            }
-
-
-        }
-    }
-
-    private <T extends AbstractSearch> void startComputation(T search) {
+    public <T extends AbstractSearch> void startComputation(T search) {
         thread = new Thread(search);
         thread.start();
     }
 
-    private <T extends AbstractSearch> void stopComputation(T search) {
+    public <T extends AbstractSearch> void stopComputation(T search) {
         try {
             if (thread != null) {
-                search.terminate();
-                thread.join();
+                synchronized (search) {
+                    search.notify();
+                    search.terminate();
+                    thread.join();
+                }
             }
         } catch (Exception exc) {
             System.err.println(exc);
